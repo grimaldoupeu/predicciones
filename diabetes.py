@@ -191,6 +191,17 @@ while True:
     
     opcion = input("\nIngrese el número de la opción deseada (1-3): ")
     
+    if opcion == "1":
+        # Preguntar género antes de los datos
+        print("\n👤 Seleccione el género del paciente:")
+        print("1. Masculino")
+        print("2. Femenino")
+        while True:
+            genero = input("\nIngrese el número correspondiente (1-2): ")
+            if genero in ["1", "2"]:
+                break
+            print("❌ Por favor ingrese una opción válida (1 o 2)")
+    
     if opcion == "3":
         print("\n" + "="*70)
         print("   ⚕️  ¡Gracias por usar el sistema de diagnóstico!")
@@ -255,13 +266,16 @@ while True:
         print("\n📝 Ingresa los datos del paciente:\n")
         
         # Solicitar datos al usuario
-        embarazos_input = obtener_numero(
-            "1. Número de embarazos (0-20): ",
-            0, 20, int
-        )
+        if genero == "2":  # Femenino
+            embarazos_input = obtener_numero(
+                "1. Número de embarazos (0-10): ",
+                0, 20, int
+            )
+        else:  # Masculino
+            embarazos_input = 0  # Para hombres, el número de embarazos siempre será 0
         
         glucosa_input = obtener_numero(
-            "2. Nivel de glucosa en sangre (mg/dL, 0-200): ",
+            f"{'2' if genero == '2' else '1'}. Nivel de glucosa en sangre (mg/dL, 0-200): ",
             0, 200, int
         )
         
@@ -316,7 +330,11 @@ while True:
     
     print("\n📋 Datos del Paciente:")
     if opcion == "2":
-        print(f"   • Embarazos: {paciente['Embarazos']}")
+        if paciente['Embarazos'] > 0:
+            print("👤 Género: Femenino")
+            print(f"   • Embarazos: {paciente['Embarazos']}")
+        else:
+            print("👤 Género: No especificado")
         print(f"   • Glucosa: {paciente['Glucosa']} mg/dL")
         print(f"   • Presión Arterial: {paciente['Presión Arterial']} mm Hg")
         print(f"   • Grosor Piel: {paciente['Grosor Piel (mm)']} mm")
@@ -325,7 +343,9 @@ while True:
         print(f"   • Función Pedigrí: {paciente['Función Pedigrí']:.3f}")
         print(f"   • Edad: {paciente['Edad']} años")
     else:
-        print(f"   • Embarazos: {embarazos_input}")
+        print(f"👤 Género: {'Femenino' if genero == '2' else 'Masculino'}")
+        if genero == "2":  # Solo mostrar embarazos para mujeres
+            print(f"   • Embarazos: {embarazos_input}")
         print(f"   • Glucosa: {glucosa_input} mg/dL")
         print(f"   • Presión Arterial: {presion_input} mm Hg")
         print(f"   • Grosor Piel: {grosor_input} mm")
